@@ -36,10 +36,6 @@ function findCountyCode(counties, countyName) {
     return found ? found.state + found.county : "Not found";
 }
 
-// ex 4
-
-
-
 // ex 5
 
 let position = 0;
