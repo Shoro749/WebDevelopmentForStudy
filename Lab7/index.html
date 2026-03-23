@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="script.js"></script>
+    <title>Document</title>
+    <style>
+        #elid {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            position: relative;
+            left: 0;
+            transition: left 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+<input type="text" id="countyInput" placeholder="Введіть округ">
+<button onclick="handleSearch()">Знайти код</button>
+
+<br>
+<hr/>
+
+<form id="myForm">
+    <input type="text" id="first_name" placeholder="First Name">
+    <input type="text" id="last_name" placeholder="Last Name">
+    <input type="email" id="email" placeholder="Email">
+    <button type="submit">Submit</button>
+</form>
+
+<br>
+
+<div id="elid"></div>
+<button onclick="moveLeft()">Вліво</button>
+<button onclick="moveRight()">Вправо</button>
+
+<script>
+    let countiesData = [];
+
+    fetchCounties().then(data => countiesData = data);
+
+    function handleSearch() {
+        const input = document.getElementById("countyInput").value;
+        const code = findCountyCode(countiesData, input);
+        console.log(code);
+    }
+
+    document.getElementById("myForm").addEventListener("submit", function(event) {
+        const firstName = document.getElementById("first_name").value;
+        const lastName = document.getElementById("last_name").value;
+        const email = document.getElementById("email").value;
+
+        if (!firstName || !lastName || !email) {
+            alert("Будь ласка, заповніть всі поля");
+            event.preventDefault();
+        } else {
+            alert(`Дані: ${firstName} ${lastName}, ${email}`);
+        }
+    });
+</script>
+</body>
+</html>
