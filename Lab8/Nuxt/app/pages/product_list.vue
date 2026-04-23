@@ -3,7 +3,7 @@ import ProductCard from "~/components/ProductCard.vue";
 import { ref, computed } from 'vue'
 
 const isAnnual = ref(true)
-const { data: products, pending, error } = await useProduct()
+const { data: products, pending, error } = await useProduct().fetchAll()
 
 const visibleProducts = computed(() => {
   if (!products.value) return []

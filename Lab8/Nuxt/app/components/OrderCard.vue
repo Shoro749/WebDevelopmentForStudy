@@ -1,7 +1,12 @@
 <script setup lang="ts">
-import type { Subscription } from '../../types/subscription'
-import type { Product } from '../../types/product'
+import type { Subscription } from '~/../types/subscription'
+import type { Product } from '~/../types/product'
+import { useSubscriptionStore } from '~/composables/stores/useSubscriptionStore'
 import { reactive } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const subscriptionStore = useSubscriptionStore()
 
 const props = defineProps<{
   product: Product
@@ -71,14 +76,13 @@ const submitForm = async () => {
   }
 
   try {
-    await $fetch('/api/subscription/create', {
-      method: 'POST',
-      body: form
-    })
+    const result = await subscriptionStore.createSubscription(form)
 
-    alert('Успішно!')
+    if (result) {
+      router.push('/checkout')
+    }
   } catch (e) {
-    alert('Помилка при створенні підписки')
+    alert('Помилка при створенні підписки: ' + (e as any)?.message)
   }
 }
 </script>
