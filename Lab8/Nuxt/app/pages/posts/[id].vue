@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto p-6 max-w-3xl">
     <div class="mb-6">
-      <NuxtLink to="/BlogPostsUi" class="text-primary hover:underline flex items-center gap-2">
+      <NuxtLink to="/posts" class="text-primary hover:underline flex items-center gap-2">
         ← Назад до списку
       </NuxtLink>
     </div>

@@ -5,7 +5,7 @@
     </h1>
 
     <UCard>
-      <UTable :data="visiblePosts" :columns="columns">
+      <UTable :data="posts" :columns="columns" :loading="pending">
         <template #title-cell="{ row }">
           <NuxtLink :to="`/posts/${row.original.id}`" class="text-primary hover:underline font-medium">
             {{ row.original.title }}
@@ -14,29 +14,22 @@
       </UTable>
 
       <div v-if="totalPosts > perPage" class="flex justify-center mt-4 border-t pt-4">
-        <UPagination v-model:page="page" :total="totalPosts" :items-per-page="perPage"/>
+        <UPagination v-model:page="page" :total="totalPosts" :per-page="perPage"/>
       </div>
     </UCard>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+
+import { ref, watch, onMounted } from 'vue'
 import type { BlogPost } from '~/../types/BlogPost'
 
 const page = ref(1)
 const perPage = 15
-
 const totalPosts = ref(0)
-const allPosts = ref<BlogPost[]>([])
 const pending = ref(false)
-
-const visiblePosts = computed(() => {
-  const start = (page.value - 1) * perPage
-  const end = start + perPage
-
-  return allPosts.value.slice(start, end)
-})
+const posts = ref<BlogPost[]>([])
 
 const columns = [
   {
@@ -53,32 +46,31 @@ const columns = [
   }
 ]
 
+
 const loadData = async () => {
   pending.value = true
-
   try {
-    const response: any = await $fetch(
-      'http://localhost/api/blog/posts'
-    )
+    const response: any = await $fetch(`http://localhost/api/admin/blog/posts?page=${page.value}`)
 
-    console.log('Отримані дані:', response)
+    console.log(response)
 
-    if (Array.isArray(response)) {
-      allPosts.value = response
+    if (response.data) {
+      posts.value = response.data
+      totalPosts.value = response.meta?.total ?? response.total ?? 0
+    } else if (Array.isArray(response)) {
+      posts.value = response
       totalPosts.value = response.length
-    } else if (response.data) {
-      allPosts.value = response.data
-      totalPosts.value =
-        response.meta?.total ?? response.data.length
     }
-
-    console.log('Всі пости:', allPosts.value)
   } catch (error) {
     console.error('Помилка завантаження:', error)
   } finally {
     pending.value = false
   }
 }
+
+watch(page, () => {
+  loadData()
+})
 
 onMounted(loadData)
 </script>
