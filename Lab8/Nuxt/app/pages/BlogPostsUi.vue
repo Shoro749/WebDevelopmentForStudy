@@ -5,7 +5,13 @@
     </h1>
 
     <UCard>
-      <UTable :data="visiblePosts" :loading="pending"/>
+      <UTable :data="visiblePosts" :columns="columns">
+        <template #title-cell="{ row }">
+          <NuxtLink :to="`/posts/${row.original.id}`" class="text-primary hover:underline font-medium">
+            {{ row.original.title }}
+          </NuxtLink>
+        </template>
+      </UTable>
 
       <div v-if="totalPosts > perPage" class="flex justify-center mt-4 border-t pt-4">
         <UPagination v-model:page="page" :total="totalPosts" :items-per-page="perPage"/>
@@ -31,6 +37,21 @@ const visiblePosts = computed(() => {
 
   return allPosts.value.slice(start, end)
 })
+
+const columns = [
+  {
+    accessorKey: 'id',
+    header: '#'
+  },
+  {
+    accessorKey: 'title',
+    header: 'Заголовок'
+  },
+  {
+    accessorKey: 'published_at',
+    header: 'Дата публікації'
+  }
+]
 
 const loadData = async () => {
   pending.value = true
