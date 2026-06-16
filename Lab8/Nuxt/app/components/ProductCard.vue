@@ -62,8 +62,8 @@ const props = defineProps<{
             <span class="text-black">{{ feature.title }}</span>
 
             <span v-if="feature.note" class="block text-gray-500 text-xs mt-1">
-                  {{ feature.note }}
-                </span>
+              {{ feature.note }}
+            </span>
           </div>
         </li>
       </ul>

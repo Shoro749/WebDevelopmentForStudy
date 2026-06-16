@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useSubscriptionStore } from '~/composables/stores/useSubscriptionStore'
 import { storeToRefs } from 'pinia'
-import OrderCard from "~/components/OrderCard.vue";
 import ProductCard from "~/components/ProductCard.vue";
 
 const subscriptionStore = useSubscriptionStore()
